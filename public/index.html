@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrape-o-Matic</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        input, button { margin: 10px 0; padding: 5px; }
+        #scrapeResults { margin-top: 20px; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1>Scrape-o-Matic</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL to scrape">
+    <input type="number" id="intervalInput" placeholder="Scrape interval (minutes)">
+    <button onclick="addJob()">Add Scraping Job</button>
+    <button onclick="getScrapes()">Get Scrapes</button>
+    <div id="scrapeResults"></div>
+
+    <script>
+        async function addJob() {
+            const url = document.getElementById('urlInput').value;
+            const interval = document.getElementById('intervalInput').value;
+            try {
+                const response = await axios.post('/api/add-job', { url, interval });
+                alert(response.data.message);
+            } catch (error) {
+                console.error('Error adding job:', error);
+            }
+        }
+
+        async function getScrapes() {
+            const url = document.getElementById('urlInput').value;
+            try {
+                const response = await axios.get(`/api/get-scrapes?url=${encodeURIComponent(url)}`);
+                const resultsDiv = document.getElementById('scrapeResults');
+                resultsDiv.innerHTML = response.data.map(scrape => {
+                    const content = JSON.parse(scrape.content);
+                    return `
+                        <div>
+                            <h3>Scrape at ${new Date(scrape.timestamp).toLocaleString()}</h3>
+                            <h4>Title: ${content.title}</h4>
+                            <p>Description: ${content.description}</p>
+                            <p>Text Content:</p>
+                            <pre>${content.text}</pre>
+                        </div>
+                    `;
+                }).join('<hr>');
+            } catch (error) {
+                console.error('Error getting scrapes:', error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+    "name": "web-scraper-jina-ai",
+    "version": "1.0.0",
+    "description": "A web scraper using Node.js, Express, and Jina AI",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "dev": "nodemon index.js"
+    },
+    "keywords": [
+      "web-scraper",
+      "node",
+      "express",
+      "jina-ai"
+    ],
+    "author": "Your Name",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^4.17.1",
+      "axios": "^0.21.1",
+      "node-cron": "^3.0.0",
+      "mongodb": "^4.1.0"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.12"
+    },
+    "engines": {
+      "node": ">=14.0.0"
+    }
+  }
